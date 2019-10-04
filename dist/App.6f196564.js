@@ -32009,9 +32009,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -32031,15 +32031,19 @@ function (_React$Component) {
     _this.state = {
       query: {}
     };
+    _this.handleEvent = _this.handleEvent.bind(_assertThisInitialized(_this)); // To make 'this' available in the method
+
     return _this;
   }
 
   _createClass(App, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
+    key: "handleEvent",
+    value: function handleEvent(e) {
       var _this2 = this;
 
-      fetch("http://localhost:3000/user/alex").then(function (result) {
+      var index = e.currentTarget.selectedIndex;
+      var value = e.currentTarget.children[index].value;
+      fetch("http://test.moynihan.io/user/".concat(value)).then(function (result) {
         return result.json();
       }).then(function (result) {
         return _this2.setState({
@@ -32048,9 +32052,29 @@ function (_React$Component) {
       });
     }
   }, {
+    key: "formatQuery",
+    value: function formatQuery() {
+      var _this3 = this;
+
+      if (this.state.query.stats) {
+        // On line 32 is a function with a conditional in it.
+        return React.createElement("div", null, React.createElement("p", null, "Age: ", this.state.query.stats.age), React.createElement("p", null, "Height: ", this.state.query.stats.height), React.createElement("p", null, "Is", function () {
+          return _this3.state.query.stats.alive ? "" : "n't";
+        }(), " Alive"));
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
-      return React.createElement("div", null, React.createElement("h1", null, this.state.query.name), React.createElement("p", null, "TTHHH"));
+      return React.createElement("div", null, React.createElement("h1", null, "Select alex or jerru to get from db:"), React.createElement("select", {
+        onChange: this.handleEvent,
+        onClick: this.handleEvent,
+        name: "sel"
+      }, React.createElement("option", {
+        value: "alex"
+      }, "alex"), React.createElement("option", {
+        value: "jerru"
+      }, "jerru")), this.formatQuery());
     }
   }]);
 
@@ -32089,7 +32113,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38965" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36569" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
